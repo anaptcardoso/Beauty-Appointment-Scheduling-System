@@ -1,4 +1,4 @@
-package pt.bookly.api.dto;
+package pt.bookly.api.dto.provider;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,5 +23,8 @@ public class ProviderRegisterRequest {
 
     private Double baseTravelFee = 5.0;
     private Double pricePerKm = 0.65;
+
+    @NotBlank(message = "Slug is required")
+    private String slug;
 
 }
