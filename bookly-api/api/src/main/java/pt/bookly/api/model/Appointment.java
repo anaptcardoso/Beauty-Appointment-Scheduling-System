@@ -36,7 +36,7 @@ public class Appointment {
      */
     @ManyToOne
     @JoinColumn(name = "service_id")
-    private Service service;
+    private ServiceOffering service;
 
     // Date of the appointment
     private LocalDate date;
@@ -84,8 +84,8 @@ public class Appointment {
     public Client getClient() { return client; }
     public void setClient(Client client) { this.client = client; }
 
-    public Service getService() { return service; }
-    public void setService(Service service) { this.service = service; }
+    public ServiceOffering getService() { return service; }
+    public void setService(ServiceOffering service) { this.service = service; }
 
     public LocalDate getDate() { return date; }
     public void setDate(LocalDate date) { this.date = date; }

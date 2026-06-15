@@ -5,7 +5,7 @@ import java.util.UUID;
 
 @Entity // Representing a service offered by a provider
 @Table(name = "services")
-public class Service {
+public class ServiceOffering {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
