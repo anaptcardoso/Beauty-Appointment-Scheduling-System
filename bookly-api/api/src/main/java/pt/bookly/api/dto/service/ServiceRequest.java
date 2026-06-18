@@ -1,6 +1,7 @@
 package pt.bookly.api.dto.service;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.jspecify.annotations.NonNull;
 
@@ -11,11 +12,11 @@ public class ServiceRequest {
 
     private String description;
 
-    @NonNull
+    @NotNull
     @Positive(message = "Duration must be positive")
     private Integer durationMin;
 
-    @NonNull
+    @NotNull
     @Positive(message = "Base price must be positive")
     private Double basePrice;
 

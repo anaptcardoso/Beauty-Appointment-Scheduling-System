@@ -59,4 +59,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+    /*@Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        String method = request.getMethod();
+        // Skip JWT filter for public POST to appointments
+        return method.equals("POST") && path.equals("/api/appointments");
+    }*/
 }
