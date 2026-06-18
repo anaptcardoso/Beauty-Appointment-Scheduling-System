@@ -5,11 +5,11 @@ public final class Queries {
 
     // Returns all active services for a specific provider
     public static final String FIND_ACTIVE_SERVICES_BY_PROVIDER =
-            "SELECT s FROM Service s WHERE s.provider.id = :providerId AND s.active = true";
+            "SELECT s FROM ServiceOffering s WHERE s.provider.id = :providerId AND s.active = true";
 
     //Returns all services for a specific provider (active and inactive)
     public static final String FIND_ALL_SERVICES_BY_PROVIDER =
-            "SELECT s FROM Service s WHERE s.provider.id = :providerId";
+            "SELECT s FROM ServiceOffering s WHERE s.provider.id = :providerId";
 
 
     // Finds a client by email address

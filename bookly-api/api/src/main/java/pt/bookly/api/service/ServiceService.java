@@ -1,6 +1,7 @@
 package pt.bookly.api.service;
 
 
+import org.springframework.stereotype.Service;
 import pt.bookly.api.dto.service.ServiceRequest;
 import pt.bookly.api.dto.service.ServiceResponse;
 import pt.bookly.api.model.Provider;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
 public class ServiceService {
 
     private final ServiceRepository serviceRepository;
