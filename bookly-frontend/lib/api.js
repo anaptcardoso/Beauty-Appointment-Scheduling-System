@@ -1,6 +1,3 @@
-import { create } from "domain";
-import { register } from "module";
-
 //Base URL do backend Spring Boot
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
