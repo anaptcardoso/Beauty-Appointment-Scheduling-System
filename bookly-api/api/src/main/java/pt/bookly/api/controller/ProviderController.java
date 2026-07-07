@@ -32,6 +32,27 @@ public class ProviderController {
         return ResponseEntity.ok(mapToResponse(provider));
     }
 
+    @PutMapping("/me")
+    public ResponseEntity<ProviderResponse> updateMe(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody ProviderResponse request) {
+
+        String email = userDetails.getUsername();
+
+        Provider provider = providerRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Provider not found"));
+
+        provider.setName(request.getName());
+        provider.setPhone(request.getPhone());
+        provider.setBaseAddress(request.getBaseAddress());
+        provider.setBaseTravelFee(request.getBaseTravelFee());
+        provider.setPricePerKm(request.getPricePerKm());
+        provider.setSlug(request.getSlug());
+
+        providerRepository.save(provider);
+
+        return ResponseEntity.ok(mapToResponse(provider));
+    }
 
     @GetMapping("/{slug}/profile")
     public ResponseEntity<ProviderResponse> getBySlug(@PathVariable String slug) {
@@ -56,4 +77,6 @@ public class ProviderController {
         response.setActive(provider.getActive());
         return response;
     }
+
+
 }

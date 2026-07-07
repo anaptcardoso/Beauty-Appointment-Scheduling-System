@@ -11,21 +11,17 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
-    async function handleSubmit(event) {
-    event.preventDefault()
+    async function handleSubmit(e) {
+    e.preventDefault()
     setError('')
     setLoading(true)
 
     try {
         const data = await auth.login({ email, password })
-
-      // Save token and provider info in localStorage
         localStorage.setItem('token', data.token)
         localStorage.setItem('providerName', data.name)
         localStorage.setItem('providerEmail', data.email)
         localStorage.setItem('providerSlug', data.slug)
-
-      // Redirect to admin dashboard
         router.push('/admin')
     } catch (err) {
         setError('Invalid email or password. Please try again.')
@@ -36,12 +32,16 @@ export default function LoginPage() {
 
     return (
     <main className="min-h-screen flex items-center justify-center px-4" style={{ background: '#fdf2f7' }}>
-        <div className="w-full max-w-md bg-white rounded-2xl p-8" style={{ border: '0.5px solid #f5d5e8' }}>
+        <div className="w-full max-w-md">
 
-        <div className="mb-6 text-center">
-            <h1 className="text-2xl font-medium text-gray-900 mb-1">Bookly</h1>
-            <p className="text-sm text-gray-400">Sign in to your account</p>
-        </div>
+            <a href="/" className="inline-block mb-4 text-sm text-gray-400 hover:text-gray-600">← Back</a>
+
+            <div className="bg-white rounded-2xl p-8" style={{ border: '0.5px solid #f5d5e8' }}>
+
+                <div className="mb-6 text-center">
+                    <h1 className="text-2xl font-medium text-gray-900 mb-1">Bookly</h1>
+                    <p className="text-sm text-gray-400">Sign in to your account</p>
+                </div>
 
         <div style={{ height: '0.5px', background: '#fce8f3', marginBottom: '24px' }} />
 
@@ -57,7 +57,7 @@ export default function LoginPage() {
             <input
                 type="email"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="ana@email.com"
                 required
                 className="w-full rounded-xl px-3 py-2.5 text-sm outline-none"
@@ -70,7 +70,7 @@ export default function LoginPage() {
             <input
                 type="password"
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
                 className="w-full rounded-xl px-3 py-2.5 text-sm outline-none"
@@ -96,6 +96,7 @@ export default function LoginPage() {
         </p>
 
         </div>
+    </div>
     </main>
     )
 }

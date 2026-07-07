@@ -11,6 +11,7 @@ export default function SettingsPage() {
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
+
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [baseAddress, setBaseAddress] = useState('')
@@ -129,7 +130,7 @@ export default function SettingsPage() {
                 <label className="block text-sm font-medium text-gray-900 mb-1.5">Public link</label>
                 <div className="flex items-center" style={{ border: '1px solid #f5d5e8', borderRadius: '12px', overflow: 'hidden' }}>
                 <span className="px-3 py-2.5 text-sm text-gray-400 bg-gray-50 border-r" style={{ borderColor: '#f5d5e8' }}>
-                    bookly.pt/agendar/
+                    bookly.pt/agendamento/
                 </span>
                 <input type="text" value={slug} onChange={(e) => setSlug(e.target.value)} required className="flex-1 px-3 py-2.5 text-sm outline-none" />
                 </div>
