@@ -34,8 +34,8 @@ export default function LoginPage() {
     <main className="min-h-screen flex items-center justify-center px-4" style={{ background: '#fdf2f7' }}>
         <div className="w-full max-w-md">
 
-            <a href="/" className="inline-block mb-4 text-sm text-gray-400 hover:text-gray-600">← Back</a>
-
+            <button onClick={() => router.back()} className="inline-block mb-4 text-sm text-gray-400 hover:text-gray-600">← Back</button>
+            
             <div className="bg-white rounded-2xl p-8" style={{ border: '0.5px solid #f5d5e8' }}>
 
                 <div className="mb-6 text-center">

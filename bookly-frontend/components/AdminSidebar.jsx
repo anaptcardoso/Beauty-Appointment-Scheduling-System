@@ -1,16 +1,34 @@
 'use client'
 
-
 import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+
+const links = [
+    { href: '/admin', label: 'Dashboard' },
+    { href: '/admin/appointments', label: 'Appointments' },
+    { href: '/admin/services', label: 'Services' },
+    { href: '/admin/blockouts', label: 'Blockouts' },
+    { href: '/admin/settings', label: 'Settings' },
+];
 
 export default function AdminSidebar() {
     const [providerName, setProviderName] = useState('');
     const [providerEmail, setProviderEmail] = useState('');
+    const pathname = usePathname();
+    const router = useRouter();
 
     useEffect(() => {
     setProviderName(localStorage.getItem('providerName') || '');
     setProviderEmail(localStorage.getItem('providerEmail') || '');
     }, []);
+
+    const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('providerName');
+    localStorage.removeItem('providerEmail');
+    localStorage.removeItem('providerSlug');
+    router.push('/login');
+    };
 
     return (
     <aside className="w-52 bg-white flex flex-col py-6 px-4 shrink-0" style={{ border: '0.5px solid #f5d5e8' }}>
@@ -26,7 +44,7 @@ export default function AdminSidebar() {
             href={link.href}
             className="px-3 py-2 rounded-xl text-sm transition-colors"
             style={
-                active === link.label
+                pathname === link.href
                 ? { background: '#fdf2f7', color: '#d4688a', fontWeight: 500 }
                 : { color: '#6b7280' }
             }

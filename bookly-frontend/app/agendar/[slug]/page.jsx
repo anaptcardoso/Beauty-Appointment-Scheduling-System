@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { providers, appointments } from '@/lib/api'
 
 export default function AgendarPage() {
     const { slug } = useParams()
+    const router = useRouter()
     const [provider, setProvider] = useState(null)
     const [serviceList, setServiceList] = useState([])
     const [loading, setLoading] = useState(true)
@@ -98,7 +99,7 @@ export default function AgendarPage() {
         <main className="min-h-screen px-4 py-10" style={{ background: '#fdf2f7' }}>
             <div className="mx-auto max-w-2xl">
 
-            <a href="/" className="inline-block mb-4 text-sm text-gray-400 hover:text-gray-600">← Back</a>
+            <button onClick={() => router.back()} className="inline-block mb-4 text-sm text-gray-400 hover:text-gray-600">← Back</button>
 
             <div className="bg-white rounded-2xl p-6 mb-6 text-center" style={{ border: '0.5px solid #f5d5e8' }}>
                 <div
@@ -106,10 +107,10 @@ export default function AgendarPage() {
                 style={{ background: '#f5d5e8', color: '#d4688a' }}
                 >
                 {provider.name?.charAt(0)}
-                </div>
-                <h1 className="text-xl font-medium text-gray-900 mb-1">{provider.name}</h1>
-                <p className="text-sm text-gray-400">{provider.baseAddress}</p>
             </div>
+            <h1 className="text-xl font-medium text-gray-900 mb-1">{provider.name}</h1>
+            <p className="text-sm text-gray-400">{provider.baseAddress}</p>
+        </div>
 
             <div className="bg-white rounded-2xl p-6 mb-6" style={{ border: '0.5px solid #f5d5e8' }}>
                 <h2 className="text-sm font-medium text-gray-900 mb-4">Services</h2>
@@ -219,6 +220,7 @@ export default function AgendarPage() {
                 </form>
             </div>
             </div>
+            
         </main>
         )
 }

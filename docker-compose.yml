@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  bookly-db:
+    image: postgres:16
+    container_name: bookly-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bookly
+      POSTGRES_USER: bookly_user
+      POSTGRES_PASSWORD: bookly_pass
+    ports:
+      - "5433:5432"
+    volumes:
+      - bookly_pgdata:/var/lib/postgresql/data
+
+volumes:
+  bookly_pgdata:

@@ -61,7 +61,7 @@ export default function RegisterPage() {
     <main className="min-h-screen flex items-center justify-center px-4 py-10" style={{ background: '#fdf2f7' }}>
         <div className="w-full max-w-lg">
 
-        <a href="/" className="inline-block mb-4 text-sm text-gray-400 hover:text-gray-600">← Back</a>
+        <button onClick={() => router.back()} className="inline-block mb-4 text-sm text-gray-400 hover:text-gray-600">← Back</button>
 
         <div className="bg-white rounded-2xl p-8" style={{ border: '0.5px solid #f5d5e8' }}>
 
