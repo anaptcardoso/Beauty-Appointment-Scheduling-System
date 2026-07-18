@@ -23,7 +23,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
@@ -35,6 +35,8 @@ public class JwtService {
     public String extractEmail(String token) {
         return getClaims(token).getSubject();
     }
+
+    public String extractRole(String token){ return getClaims(token).get("role", String.class);}
 
     public boolean isTokenValid(String token) {
         try {

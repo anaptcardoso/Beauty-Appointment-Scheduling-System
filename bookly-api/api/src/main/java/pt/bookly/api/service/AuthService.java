@@ -1,7 +1,5 @@
 package pt.bookly.api.service;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pt.bookly.api.dto.auth.LoginRequest;
@@ -11,26 +9,30 @@ import pt.bookly.api.dto.provider.ProviderResponse;
 import pt.bookly.api.model.Provider;
 import pt.bookly.api.repository.ProviderRepository;
 import pt.bookly.api.security.JwtService;
+import pt.bookly.api.dto.client.ClientRegisterRequest;
+import pt.bookly.api.model.Client;
+import pt.bookly.api.repository.ClientRepository;
 
 
 @Service
 public class AuthService {
 
     private final ProviderRepository providerRepository;
+    private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
 
     // Constructor injection - Spring automatically provides these dependencies
     public AuthService(
             ProviderRepository providerRepository,
+            ClientRepository clientRepository,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService,
-            AuthenticationManager authenticationManager) {
+            JwtService jwtService) {
         this.providerRepository = providerRepository;
+        this.clientRepository = clientRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
+
     }
 
     public ProviderResponse register(ProviderRegisterRequest request) {
@@ -60,17 +62,14 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
-                        request.getPassword()
-                )
-        );
-
         Provider provider = providerRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Provider not found"));
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
 
-        String token = jwtService.generateToken(provider.getEmail());
+        if (!passwordEncoder.matches(request.getPassword(), provider.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        String token = jwtService.generateToken(provider.getEmail(), "PROVIDER");
 
         return new LoginResponse(
                 token,
@@ -92,5 +91,38 @@ public class AuthService {
         response.setSlug(provider.getSlug());
         response.setActive(provider.getActive());
         return response;
+    }
+
+    public LoginResponse registerClient(ClientRegisterRequest request) {
+
+        if (clientRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already in use");
+        }
+
+        Client client = new Client();
+        client.setName(request.getName());
+        client.setEmail(request.getEmail());
+        client.setPhone(request.getPhone());
+        client.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        Client saved = clientRepository.save(client);
+
+        String token = jwtService.generateToken(saved.getEmail(), "CLIENT");
+
+        return new LoginResponse(token, saved.getName(), saved.getEmail(), null);
+    }
+
+    public LoginResponse loginClient(LoginRequest request) {
+
+        Client client = clientRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(request.getPassword(), client.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        String token = jwtService.generateToken(client.getEmail(), "CLIENT");
+
+        return new LoginResponse(token, client.getName(), client.getEmail(), null);
     }
 }

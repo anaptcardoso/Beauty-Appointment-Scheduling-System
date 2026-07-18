@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,11 +18,16 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final ProviderDetailsService providerDetailsService;
+    private final ClientDetailsService clientDetailsService;
 
-    public JwtAuthFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+    public JwtAuthFilter(
+            JwtService jwtService,
+            ProviderDetailsService providerDetailsService,
+            ClientDetailsService clientDetailsService) {
         this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
+        this.providerDetailsService = providerDetailsService;
+        this.clientDetailsService = clientDetailsService;
     }
 
     @Override
@@ -47,9 +52,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         String email = jwtService.extractEmail(token);
+        String role = jwtService.extractRole(token);
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var userDetails = userDetailsService.loadUserByUsername(email);
+            UserDetails userDetails = "CLIENT".equals(role)
+                    ? clientDetailsService.loadUserByUsername(email)
+                    : providerDetailsService.loadUserByUsername(email);
+
             var authToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities()
             );
@@ -59,12 +68,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-    /*@Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        String method = request.getMethod();
-        // Skip JWT filter for public POST to appointments
-        return method.equals("POST") && path.equals("/api/appointments");
-    }*/
 }

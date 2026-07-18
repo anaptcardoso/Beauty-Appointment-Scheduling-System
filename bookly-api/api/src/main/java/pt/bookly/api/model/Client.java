@@ -15,6 +15,7 @@ public class Client {
     private String name;
     private String email;
     private String phone;
+    private String password;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -35,6 +36,14 @@ public class Client {
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
