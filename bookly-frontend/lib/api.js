@@ -24,6 +24,30 @@ async function apiFetch(path, options = {}) {
     return res.json()
 }
 
+async function clientApiFetch(path, options = {}) {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('clientToken') : null
+
+    const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...options.headers,
+    }
+
+    const res = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers,
+    })
+
+    if (!res.ok) {
+    const error = await res.json().catch(() => ({ message: 'Unknown error' }))
+    throw new Error(error.message || `Error ${res.status}`)
+    }
+
+    if (res.status === 204) return null
+
+    return res.json()
+}
+
 export const auth = {
     register: (data) => apiFetch('/api/auth/register', { method: 'POST', body: JSON.stringify(data) }),
     login: (data) => apiFetch('/api/auth/login', { method: 'POST', body: JSON.stringify(data) }),
@@ -54,4 +78,14 @@ export const blockouts = {
     getAll: () => apiFetch('/api/blockouts'),
     create: (data) => apiFetch('/api/blockouts', { method: 'POST', body: JSON.stringify(data) }),
     delete: (id) => apiFetch(`/api/blockouts/${id}`, { method: 'DELETE' }),
+}
+
+export const clientAuth = {
+    register: (data) => clientApiFetch('/api/auth/client/register', { method: 'POST', body: JSON.stringify(data) }),
+    login: (data) => clientApiFetch('/api/auth/client/login', { method: 'POST', body: JSON.stringify(data) }),
+}
+
+export const clients = {
+    getMe: () => clientApiFetch('/api/clients/me'),
+    getMyAppointments: () => clientApiFetch('/api/clients/me/appointments'),
 }
