@@ -37,6 +37,13 @@ public class AppointmentService {
                 .collect(Collectors.toList());
     }
 
+    public List<AppointmentResponse> findByClient(UUID clientId){
+        return appointmentRepository.findByClientId(clientId)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
     public AppointmentResponse create(AppointmentRequest request){
         Provider provider = providerRepository.findById(request.getProviderId())
                 .orElseThrow(() -> new RuntimeException("Provider not found"));
