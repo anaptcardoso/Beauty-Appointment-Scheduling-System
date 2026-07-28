@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { providers, appointments } from '@/lib/api'
+import { providers, appointments, clients } from '@/lib/api'
 
 export default function AgendarPage() {
     const { slug } = useParams()
@@ -12,6 +12,7 @@ export default function AgendarPage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [success, setSuccess] = useState(false)
+    const [isClientLoggedIn, setIsClientLoggedIn] = useState(false)
 
     // Form state
     const [clientName, setClientName] = useState('')
@@ -42,6 +43,24 @@ export default function AgendarPage() {
         if (slug) loadProvider()
     }, [slug])
 
+    useEffect(() => {
+        const clientToken = localStorage.getItem('clientToken')
+        if (!clientToken) return
+
+        async function loadClient() {
+            try {
+                const clientData = await clients.getMe()
+                setClientName(clientData.name || '')
+                setClientEmail(clientData.email || '')
+                setClientPhone(clientData.phone || '')
+                setIsClientLoggedIn(true)
+            } catch (err) {
+                // Token inválido ou expirado — ignora, deixa o formulário vazio
+            }
+        }
+        loadClient()
+    }, [])
+
     const selectedService = serviceList.find(s => s.id === serviceId)
 
     async function handleSubmit(e) {
@@ -64,14 +83,16 @@ export default function AgendarPage() {
         })
 
         setSuccess(true)
-        setClientName('')
-        setClientEmail('')
-        setClientPhone('')
         setServiceId('')
         setDate('')
         setStartTime('')
         setAddress('')
         setNotes('')
+        if (!isClientLoggedIn) {
+            setClientName('')
+            setClientEmail('')
+            setClientPhone('')
+        }
         } catch (err) {
         setError(err.message || 'Failed to book appointment. Please try again.')
         } finally {
@@ -142,6 +163,14 @@ export default function AgendarPage() {
 
             <div className="bg-white rounded-2xl p-6" style={{ border: '0.5px solid #f5d5e8' }}>
                 <h2 className="text-sm font-medium text-gray-900 mb-4">Book appointment</h2>
+
+                {isClientLoggedIn && (
+                    <div className="mb-4 rounded-xl px-4 py-3 text-sm" style={{ background: '#fdf2f7', border: '1px solid #f5d5e8' }}>
+                        <p className="text-gray-500 text-xs">
+                            Signed in as <span className="font-medium" style={{ color: '#d4688a' }}>{clientName}</span> — your details are pre-filled.
+                        </p>
+                    </div>
+                )}
 
                 {success && (
                 <div className="mb-4 rounded-xl px-4 py-3 text-sm" style={{ background: '#fdf2f7', border: '1px solid #f5d5e8' }}>

@@ -3,33 +3,54 @@ import Link from 'next/link'
 export default function LandingPage() {
     return (
     <main className="min-h-screen" style={{ background: '#fdf2f7' }}>
-
-        <nav className="bg-white px-8 py-4 flex items-center justify-between" style={{ border: '0.5px solid #f5d5e8' }}>
+        <nav className="bg-white px-8 py-4" style={{ border: '0.5px solid #f5d5e8' }}>
         <p className="text-sm font-medium text-gray-900">Bookly</p>
-        <div className="flex gap-3">
-            <Link href="/login" className="rounded-xl px-4 py-2 text-sm text-gray-600 hover:bg-gray-50" style={{ border: '0.5px solid #e5e7eb' }}>
-            Sign in
-            </Link>
-            <Link href="/register" className="rounded-xl px-4 py-2 text-sm font-medium text-white" style={{ background: '#d4688a' }}>
-            Get started
-            </Link>
-        </div>
         </nav>
 
-        <div className="max-w-3xl mx-auto px-8 py-24 text-center">
+        <div className="max-w-3xl mx-auto px-8 pt-24 pb-12 text-center">
         <h1 className="text-4xl font-medium text-gray-900 mb-4 leading-tight">
             The booking platform for beauty professionals
         </h1>
-        <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto">
+        <p className="text-lg text-gray-400 max-w-xl mx-auto">
             Create your profile, set your services and share your link with clients. Bookings managed automatically.
         </p>
-        <div className="flex gap-4 justify-center">
-            <Link href="/register" className="rounded-xl px-8 py-3 text-sm font-medium text-white" style={{ background: '#d4688a' }}>
-            Create free account
+        </div>
+
+        <div className="max-w-3xl mx-auto px-8 pb-24">
+        <div className="grid grid-cols-2 gap-6">
+
+            <div className="bg-white rounded-2xl p-8 flex flex-col" style={{ border: '0.5px solid #f5d5e8' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-xl" style={{ background: '#fdf2f7', color: '#d4688a' }}>
+                📅
+            </div>
+            <h2 className="text-lg font-medium text-gray-900 mb-2">I&apos;m a client</h2>
+            <p className="text-sm text-gray-400 mb-6 flex-1">
+                Book appointments with your favorite professionals and manage your bookings in one place.
+            </p>
+            <Link href="/client/register" className="rounded-xl px-6 py-3 text-sm font-medium text-white text-center transition-opacity hover:opacity-90" style={{ background: '#d4688a' }}>
+                Book an appointment
             </Link>
-            <Link href="/agendar/ana-cardoso" className="rounded-xl px-8 py-3 text-sm text-gray-600 hover:bg-white" style={{ border: '0.5px solid #f5d5e8' }}>
-            See demo
+            <Link href="/client/login" className="text-center text-sm text-gray-400 hover:text-gray-600 mt-3">
+                Already have an account? Sign in
             </Link>
+            </div>
+
+            <div className="bg-white rounded-2xl p-8 flex flex-col" style={{ border: '0.5px solid #f5d5e8' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 text-xl" style={{ background: '#fdf2f7', color: '#d4688a' }}>
+                💼
+            </div>
+            <h2 className="text-lg font-medium text-gray-900 mb-2">I&apos;m a professional</h2>
+            <p className="text-sm text-gray-400 mb-6 flex-1">
+                Create your profile, list your services, and share your personal booking link with clients.
+            </p>
+            <Link href="/register" className="rounded-xl px-6 py-3 text-sm font-medium text-center transition-opacity hover:opacity-90" style={{ background: 'white', color: '#d4688a', border: '1.5px solid #d4688a' }}>
+                Advertise your services
+            </Link>
+            <Link href="/login" className="text-center text-sm text-gray-400 hover:text-gray-600 mt-3">
+                Already have an account? Sign in
+            </Link>
+            </div>
+
         </div>
         </div>
 
@@ -58,7 +79,6 @@ export default function LandingPage() {
             </div>
         </div>
         </div>
-
     </main>
     )
 }
